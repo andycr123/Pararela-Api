@@ -1,12 +1,14 @@
-async function fetchMultipleResources() {
+const fetchMultipleResources = async function() {
     try {
-        const [usersResponse, postsResponse] = await Promise.all([
+        const [usersResponse, postsResponse, todoResponse] = await Promise.all([
             fetch('https://jsonplaceholder.typicode.com/users'),
-            fetch('https://jsonplaceholder.typicode.com/posts')
+            fetch('https://jsonplaceholder.typicode.com/posts'),
+            fetch('https://jsonplaceholder.typicode.com/todos/1')
         ]);
 
         const users = await usersResponse.json();
         const posts = await postsResponse.json();
+        const todo = await todoResponse.json();
 
         const contentContainer = document.getElementById('content');
 
@@ -29,6 +31,12 @@ async function fetchMultipleResources() {
             });
             contentContainer.innerHTML += '</div>';
         }
+
+        // Mostrar tarea
+        contentContainer.innerHTML += '<div class="user-post-card">';
+        contentContainer.innerHTML += '<h2>Tarea</h2>';
+        contentContainer.innerHTML += `<p>${todo.title} - Completado: ${todo.completed}</p>`;
+        contentContainer.innerHTML += '</div>';
 
     } catch (error) {
         console.error('Error fetching resources:', error);
